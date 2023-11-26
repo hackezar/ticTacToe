@@ -113,6 +113,7 @@ function humanMove (game) {
         if ( game.gameBoard[key].keyPress == humanMove) {
             if (game.gameBoard[key].marker === " ") {
             game.gameBoard[key].marker = game.players.human.symbol;
+            
             } else {
                 console.log("This spot is taken. Try another spot.");
                 
@@ -256,4 +257,21 @@ function game () {
 
 game();
 
+//create click monitoring for the boxes in html
 
+function createBoxEventListeners(id) {
+    const box = document.getElementById(id)
+    return box.addEventListener("click", () => {
+        alert("click");
+    });
+}
+
+createBoxEventListeners('top-left');
+createBoxEventListeners('top-mid');
+createBoxEventListeners('top-right');
+createBoxEventListeners('mid-mid');
+createBoxEventListeners('mid-left');
+createBoxEventListeners('mid-right');
+createBoxEventListeners('bottom-left');
+createBoxEventListeners('bottom-mid');
+createBoxEventListeners('bottom-right');
