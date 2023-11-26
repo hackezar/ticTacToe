@@ -85,7 +85,6 @@ function whosFirst (game) {
 }
 
 function playRound(game, first) {
-    console.log(game.gameBoard);
     if (first == "human") {
         updatedGame = humanMove(game);
         if (updatedGame == 'quit') {
@@ -103,23 +102,11 @@ function playRound(game, first) {
     return game;
 }
 
+
+
 function humanMove (game) {
-    let humanMove = prompt("Pick 1-9 for where to place your move");
-    if (humanMove == 'quit'){
-        return 'quit';
-    }
-    //loops through the board and finds the object with the number the human input
-    for (const key in game.gameBoard) {
-        if ( game.gameBoard[key].keyPress == humanMove) {
-            if (game.gameBoard[key].marker === " ") {
-            game.gameBoard[key].marker = game.players.human.symbol;
-            
-            } else {
-                console.log("This spot is taken. Try another spot.");
-                
-            }
-        } 
-    }
+    tellHumanToMove();
+    
     return game;
 }
 
@@ -257,21 +244,77 @@ function game () {
 
 game();
 
-//create click monitoring for the boxes in html
+function createGameDOM() {
+    const introHeader = document.createElement("h1");
+    introHeader.setAttribute("id", 'header')
+    introHeader.innerHTML = "Tic-Tac-Toe!";
+    document.body.appendChild(introHeader);
 
+    const container = document.createElement('div');
+    container.setAttribute("id", 'container');
+    document.body.appendChild(container);
+    createBoxes('top-left');
+    createBoxes('top-middle');
+    createBoxes('top-right');
+    createBoxes('middle-left');
+    createBoxes('middle-middle');
+    createBoxes('middle-right');
+    createBoxes('bottom-left');
+    createBoxes('bottom-middle');
+    createBoxes('bottom-right');
+
+
+}
+
+//create 9 tic tac toe boxes
+function createBoxes(id) {
+    const box = document.createElement('div');
+    box.setAttribute('id', id);
+    box.setAttribute('class', 'box');
+    document.getElementById('container').appendChild(box);
+    createBoxEventListeners(id);
+    
+
+}
+
+//create click monitoring for the boxes in html
 function createBoxEventListeners(id) {
     const box = document.getElementById(id)
     return box.addEventListener("click", () => {
-        alert("click");
+        ;
     });
 }
 
-createBoxEventListeners('top-left');
-createBoxEventListeners('top-mid');
-createBoxEventListeners('top-right');
-createBoxEventListeners('mid-mid');
-createBoxEventListeners('mid-left');
-createBoxEventListeners('mid-right');
-createBoxEventListeners('bottom-left');
-createBoxEventListeners('bottom-mid');
-createBoxEventListeners('bottom-right');
+function tellHumanToMove() {
+    const tellToMove = document.createElement('node');
+    tellToMove.innerHTML = "Pick your Square!"
+    document.body.appendChild(tellToMove);
+}
+
+//delete this to add start screen
+createGameDOM();
+//uncomment this to add a start screen
+
+/*function createStartScreen() {
+introContainer = document.createElement('div');
+introContainer.setAttribute("id", "container");
+introHeader = document.createElement("h1");
+introHeader.innerHTML = "Tic-Tac-Toe!";
+document.body.appendChild(introContainer);
+container.appendChild(introHeader)
+
+//adds start button to begin the game
+startBtn = document.createElement('button');
+startBtn.setAttribute("id", "startBtn");
+startBtn.textContent = "Start";
+startBtn.addEventListener("click", () => {
+    introContainer.remove();
+    createGameDOM();
+    //game();
+})
+container.appendChild(startBtn);
+}
+
+createStartScreen();
+*/
+
