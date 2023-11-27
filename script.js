@@ -16,7 +16,7 @@ function createGameboard() {
             keyPress: 4,
             marker: " "
         },
-        middleMiddle: {
+        center: {
             keyPress: 5,
             marker: " "
         },
@@ -86,30 +86,14 @@ function whosFirst (game) {
  }
 }
 
-function tellHumanToMove() {
-    const tellToMove = document.createElement('node');
-    tellToMove.innerHTML = "Pick your Square!"
-    document.body.appendChild(tellToMove);
-}
-
 function humanMove (id, game) {
-    console.log(game.gameBoard[id].marker);
     if (game.gameBoard[id].marker === " ") {
         game.gameBoard[id].marker = game.players.human.symbol;
         game.players.human.moved = true;
         addText(`${game.players.human.name} selects ${id}`);
         updateDOM(game);
-        if ( game.players.computer.moved === false ) {
-            computerMove(game);
-            game.players.computer.moved = false;
-            game.players.human.moved = false;
-            checkIfWon(game);
-        }
-        else if ( game.players.computer.moved === true ) {
-            game.players.computer.moved = false;
-            game.players.human.moved = false;
-            checkIfWon(game);
-        }
+        checkIfWon(game);
+        playRound(game);
     } else {
         addText('Spot already taken. Try again.')
     }
@@ -117,106 +101,75 @@ function humanMove (id, game) {
 
 
 function computerMove (game) {
+    let board = game.gameBoard;
     let computerSymbol = game.players.computer.symbol;
-    //try to get on a corner
-    let random4 = getRandomInt(4);
-    if (game.gameBoard.topLeft.marker == " " || game.gameBoard.topRight.marker == " " || game.gameBoard.bottomLeft.marker == " " || game.gameBoard.bottomRight.marker == " ") {
-        switch (random4) {
-            case 0: 
-                if (game.gameBoard.topLeft.marker == " ") {
-                    game.gameBoard.topLeft.marker = computerSymbol;
-                    updateDOM(game);
-                    addText(`Computer Selects Top Left`);
-                    game.players.computer.moved = true;
-                    break;
-                } else {
-                    computerMove(game);
-                }
-            case 1:
-                if (game.gameBoard.bottomLeft.marker == " ") {
-                    game.gameBoard.bottomLeft.marker = computerSymbol;
-                    game.players.computer.moved = true;
-                    updateDOM(game);
-                    addText(`Computer Selects Bottom Left`);
-                    break;
-                } else {
-                    computerMove(game);
-                }
-            case 2:
-                if (game.gameBoard.topRight.marker == " ") {
-                    game.gameBoard.topRight.marker = computerSymbol;
-                    game.players.computer.moved = true;
-                    updateDOM(game);
-                    addText(`Computer Selects Top Right`);
-                    break;
-                } else {
-                    computerMove(game);
-                }
-            case 3: 
-            if (game.gameBoard.bottomRight.marker == " ") {
-                game.gameBoard.bottomRight.marker = computerSymbol;
-                game.players.computer.moved = true;
-                updateDOM(game);
-                addText(`Computer Selects Bottom Right`);
-                break;
-            } else {
-                computerMove(game);
-            }
-        }
-        return game;
-      //Try to get in middle  
-    } else if ( game.gameBoard.middleMiddle.marker == " ") {
-        game.gameBoard.middleMiddle.marker = computerSymbol;
+    //1. Go for a corner
+    if (board.topLeft.marker == " ") {
+        game.gameBoard.topLeft.marker = computerSymbol;
         game.players.computer.moved = true;
         updateDOM(game);
-        addText(`Computer Selects Center`);
-        return game;
-    } else if ( game.gameBoard.middleLeft == " " || game.gameBoard.middleRight == " " || game.gameBoard.topMiddle == " " || game.gameBoard.bottomMiddle == " " ) {
-        //if corners and middle spot is taken, randomly select one of the open remaining spots
-        switch (random4) {
-            case 0:
-                if (game.gameBoard.middleLeft.marker == " ") {
-                    game.gameBoard.middleLeft.marker = computerSymbol;
-                    game.players.computer.moved = true;
-                    updateDOM(game);
-                    addText(`Computer Selects Middle Left`);
-                    break;
-                } else {
-                    computerMove(game);
-                }
-            case 1:
-                if (game.gameBoard.middleRight.marker = " ") {
-                    game.gameBoard.middleRight.marker = computerSymbol;
-                    game.players.computer.moved = true;
-                    updateDOM(game);
-                    addText(`Computer Selects Middle Right`);
-                    break;
-                } else {
-                    computerMove(game);
-                }
-            case 2: 
-                if (game.gameBoard.topMiddle.marker = " ") {
-                    game.gameBoard.topMiddle.marker = computerSymbol;
-                    game.players.computer.moved = true;
-                    updateDOM(game);
-                    addText(`Computer Selects Top Middle`);
-                    break;
-                } else {
-                    computerMove(game);
-                }
-            case 3: 
-                if (game.gameBoard.bottomMiddle.marker = " ") {
-                    game.gameBoard.bottomMiddle.marker = computerSymbol;
-                    game.players.computer.moved = true;
-                    updateDOM(game);
-                    addText(`Computer Selects Bottom Middle`);
-                    break;
-                } else {
-                    computerMove(game);
-                }
-        }
-    }
-    return game;
+        addText(`Computer selects Top Left`);
+        checkIfWon(game);
+        playRound(game);
+    } else if (board.topRight.marker == " ") {
+        game.gameBoard.topRight.marker = computerSymbol;
+        game.players.computer.moved = true;
+        updateDOM(game);
+        addText('Computer selects Top Left');
+        checkIfWon(game);
+        playRound(game);
+    } else if (board.bottomLeft.marker == " "){
+        game.gameBoard.bottomLeft.marker = computerSymbol;
+        game.players.computer.moved = true;
+        updateDOM(game);
+        addText('Computer selects Bottom Left');
+        checkIfWon(game);
+        playRound(game);
+    } else if (board.bottomRight.marker == " ") {
+        game.gameBoard.bottomRight.marker = computerSymbol;
+        game.players.computer.moved = true;
+        updateDOM(game);
+        addText('Computer selects Bottom Right');
+        checkIfWon(game);
+        playRound(game);
+    } else if (board.center.marker == " ") {
+        game.gameBoard.center.marker = computerSymbol;
+        game.players.computer.moved = true;
+        updateDOM(game);
+        addText('Computer selects Center');
+        checkIfWon(game);
+        playRound(game);
+    } else if (board.middleLeft.marker == " ") {
+        game.gameBoard.middleLeft.marker = computerSymbol;
+        game.players.computer.moved = true;
+        updateDOM(game);
+        addText('Computer Selects Middle Left');
+        checkIfWon(game);
+        playRound(game);
+    } else if (board.middleRight.marker == " ") {
+        game.gameBoard.middleRight.marker = computerSymbol;
+        game.players.computer.moved = true;
+        updateDOM(game);
+        addText('Computer Selects Middle Right');
+        checkIfWon(game);
+        playRound(game);
+    } else if (board.topMiddle.marker == " ") {
+        game.gameBoard.topMiddle.marker = computerSymbol;
+        game.players.computer.moved = true;
+        updateDOM(game);
+        addText('Computer Selects Top Middle');
+        checkIfWon(game);
+        playRound(game);
+    } else if (board.bottomMiddle.marker == " ") {
+        game.gameBoard.bottomMiddle.marker = computerSymbol;
+        game.players.computer.moved = true;
+        updateDOM(game);
+        addText('Computer Selects Bottom Middle');
+        checkIfWon(game);
+        playRound(game);
+    } 
+
+    
 }
 
 function checkIfWon (game) {
@@ -225,7 +178,7 @@ function checkIfWon (game) {
     boMi = board.bottomMiddle.marker;
     boRi = board.bottomRight.marker;
     miLe = board.middleLeft.marker;
-    miMi = board.middleMiddle.marker;
+    cent = board.center.marker;
     miRi = board.middleRight.marker;
     toLe = board.topRight.marker;
     toMi = board.topMiddle.marker;
@@ -233,27 +186,35 @@ function checkIfWon (game) {
     //switch statement that checks for a winner
     switch (true) {
         case boLe == "O" && boMi == 'O' && boRi == 'O':
-        case miLe == 'O' && miMi == 'O' && miRi == 'O':
+        case miLe == 'O' && cent == 'O' && miRi == 'O':
         case toLe == 'O' && toMi == 'O' && toRi == 'O':
         case boLe == 'O' && miLe == 'O' && toLe == 'O':
-        case boMi == 'O' && miMi == 'O' && toMi == 'O':
+        case boMi == 'O' && cent == 'O' && toMi == 'O':
         case boRi == 'O' && miRi == 'O' && toRi == 'O':
         case toLe == 'O' && miMi == 'O' && boRi == 'O':
         case toRi == 'O' && miMi == 'O' && boLe == 'O':
-            console.log("WINNER");
+            if (game.players.human.symbol == "O") {
+                alert("You Won!");
+            } else {
+                alert("Oh No! You Lost!");
+            }
             break;
         case boLe == "X" && boMi == 'X' && boRi == 'X':
-        case miLe == 'X' && miMi == 'X' && miRi == 'X':
+        case miLe == 'X' && cent == 'X' && miRi == 'X':
         case toLe == 'X' && toMi == 'X' && toRi == 'X':
         case boLe == 'X' && miLe == 'X' && toLe == 'X':
-        case boMi == 'X' && miMi == 'X' && toMi == 'X':
+        case boMi == 'X' && cent == 'X' && toMi == 'X':
         case boRi == 'X' && miRi == 'X' && toRi == 'X':
-        case toLe == 'X' && miMi == 'X' && boRi == 'X':
-        case toRi == 'X' && miMi == 'X' && boLe == 'X':
-            console.log("WINNER");
+        case toLe == 'X' && cent == 'X' && boRi == 'X':
+        case toRi == 'X' && cent == 'X' && boLe == 'X':
+            if (game.players.human.symbol == "X") {
+                alert("You Won!");
+            } else {
+                alert("Oh No! You Lost!");
+            }
             break;
         default:
-            playRound(game);
+            return;
     }
 }
 
@@ -268,19 +229,31 @@ function game () {
     let first = whosFirst(game);
     createGameDOM(game, first);
     playRound(game, first);
-    
-    
-}
-
-function playRound(game, first) {
-    if (first == 'human') {
-        return game;
     }
 
-    else if (first == 'computer') {
+function playRound(game) {
+    let human = game.players.human;
+    let computer = game.players.computer;
+    if (human.goesFirst == true && human.moved == false ) {
+        addText('Make your move');
+    } else if (human.goesFirst == true && human.moved == true && computer.moved == false) {
         computerMove(game);
-        return game;
+    } else if (human.goesFirst == true && human.moved == true && computer.moved == true) {
+        human.moved = false;
+        computer.moved = false;
+        playRound(game);
+    } else if (computer.goesFirst == true && computer.moved == false) {
+        computerMove(game);
+        playRound(game);
+    } else if (computer.goesFirst == true && computer.moved == true && human.moved == false) {
+        addText('Make your move');
+    } else if (computer.goesFirst == true && computer.moved == true && human.moved == true) {
+        game.players.human.moved = false;
+        game.players.computer.moved = false;
+        playRound(game);
     }
+    
+
 }
 
 game();
@@ -297,7 +270,7 @@ function createGameDOM(game, first) {
     createBoxes('topMiddle', game);
     createBoxes('topRight', game);
     createBoxes('middleLeft', game);
-    createBoxes('middleMiddle', game);
+    createBoxes('center', game);
     createBoxes('middleRight', game);
     createBoxes('bottomLeft', game);
     createBoxes('bottomMiddle', game);
@@ -310,7 +283,7 @@ function createGameDOM(game, first) {
     
 }
 
-function addText(text, box) {
+function addText(text) {
 
         let para = document.createElement("p");
         para.innerText = text;
@@ -343,23 +316,24 @@ function createBoxEventListeners(id, game) {
 //updates the dom based off the gameBoard object
 function updateDOM(game) {
     let toLe = document.getElementById('topLeft');
-    toLe.innerHTML = game.gameBoard.topLeft.marker;
+    toLe.innerText = game.gameBoard.topLeft.marker;
     let toMi = document.getElementById('topMiddle');
-    toMi.innerHtml = game.gameBoard.topMiddle.marker;
+    toMi.innerText = game.gameBoard.topMiddle.marker;
     let toRi = document.getElementById('topRight');
-    toRi.innerHtml = game.gameBoard.topRight.marker;
+    toRi.innerText = game.gameBoard.topRight.marker;
     let miLe = document.getElementById('middleLeft');
-    miLe.innerHtml = game.gameBoard.middleLeft.marker;
-    let miMi = document.getElementById("middleMiddle");
-    miMi.innerHTML = game.gameBoard.middleMiddle.marker;
+    miLe.innerText = game.gameBoard.middleLeft.marker;
+    let center = document.getElementById("center");
+    center.innerText = game.gameBoard.center.marker;
     let miRi = document.getElementById("middleRight");
-    miRi.innerHTML = game.gameBoard.middleRight.marker;
+    miRi.innerText = game.gameBoard.middleRight.marker;
     let boLe = document.getElementById('bottomLeft');
-    boLe = game.gameBoard.bottomLeft.marker;
+    boLe.innerText = game.gameBoard.bottomLeft.marker;
     let boMi = document.getElementById('bottomMiddle');
-    boMi.innerHTML = game.gameBoard.bottomMiddle.marker;
+    boMi.innerText = game.gameBoard.bottomMiddle.marker;
     let boRi = document.getElementById("bottomRight");
-    boRi.innerHTML = game.gameBoard.bottomRight.marker;
+    boRi.innerText = game.gameBoard.bottomRight.marker;
+    return game;
 }
 
 

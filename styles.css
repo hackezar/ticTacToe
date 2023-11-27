@@ -32,3 +32,13 @@ body {
     display: flex;
     justify-content: center;
 }
+
+#textBox {
+    overflow-y: scroll;
+    margin-left: auto;
+    margin-right: auto;
+    height: 20vh;
+    padding: 10rem;
+    display: flex;
+    flex-direction: column;
+}
