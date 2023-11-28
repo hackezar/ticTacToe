@@ -1,5 +1,14 @@
-body {
+@font-face {font-family: Pacifico; src: url('fonts/Pacifico/Pacifico-Regular.ttf'); }
 
+
+
+:root{
+    --shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+    --color1: #FF8C94;
+    }
+
+body {
+    background-color: #A8E6CE;
 }
 
 #introContainer {
@@ -8,6 +17,24 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: 1px solid black;
+}
+
+#introContainer > h1 {
+    font-family: Pacifico, sans-serif;
+}
+
+#nameInput {
+    border-radius: 6px;
+    background-color: #FF8C94;
+    font-weight: 900;
+    color:white;
+    margin-bottom:  0.5rem;
+}
+
+#startBtn {
+    border-radius: 16px;
+    background-color: #FFD385;
 }
 
 #container {
@@ -19,7 +46,11 @@ body {
     grid-template-rows: 1fr 1fr 1fr;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    padding: 100px;
+    background: var(--color1);
+    border-radius: 2rem;
+    box-shadow: var(--shadow);
 }
 
 .box {
@@ -29,10 +60,20 @@ body {
     margin: 0;
     padding: 0;
     border: 1px solid black;
+    font-size: 7rem;
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Pacifico, sans-serif;
+    background-color: #FFD385;
 }
+
+
 
 .box:hover {
     cursor: crosshair;
+    background-color: #FFAAA6;
 }
 
 #startBtn {
@@ -45,7 +86,11 @@ body {
 
 #header {
     display: flex;
+    flex-direction: row;
     justify-content: center;
+    font-family: Pacifico, sans-serif;
+    font-size: 3rem;
+
 }
 
 #textBox {
@@ -56,6 +101,8 @@ body {
     display: flex;
     flex-direction: column;
     min-width: 20rem;
+    background-color: #DCEDC2;
+    box-shadow: var(--shadow);
 
 }
 
@@ -69,4 +116,31 @@ body {
     height: 100vh;
     align-items: center;
     justify-content: center;
+}
+
+#humanDiv {
+    position:absolute;
+    top: 10px;
+    left: 15px;
+    background-color: #FFAAA6;
+    padding: 0 1rem;
+    border-radius: 10px;
+    font-family: Pacifico, sans-serif;
+}
+
+#computerDiv {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    padding: 0 1rem;
+    border-radius: 10px;
+    background-color: #FFAAA6;
+    box-shadow: var(--shadow);
+    font-family: Pacifico, sans-serif;
+}
+
+#replayBtn {
+    border-radius: 12px;
+    background-color: #FFAAA6;
+    margin-bottom: 0.8rem;
 }

@@ -1,38 +1,47 @@
 function createGameboard() {
     return Gameboard = {
         topLeft: {
+            name: "Top Left",
             keyPress: 7,
             marker: " "
         },
         topMiddle: {
+            name: "Top Middle",
             keyPress: 8,
             marker: " "
         },
         topRight: {
+            name: "Top Right",
             keyPress: 9,
             marker: " "
         },
         middleLeft: {
+            name: "Middle Left",
             keyPress: 4,
             marker: " "
         },
         center: {
+            name: "Center",
             keyPress: 5,
             marker: " "
         },
         middleRight: {
+            name: "Middle Right",
             keyPress: 6,
             marker:  " "
         },
         bottomLeft: {
+            name: "Bottom Left",
             keyPress: 1,
             marker: " "
         },
         bottomMiddle: {
+            name:"Bottom Middle",
             keyPress: 2,
             marker: " "
         },
         bottomRight: {
+            name: "Bottom Right",
             keyPress: 3,
             marker: " "
         }
@@ -92,8 +101,9 @@ function humanMove (id, game) {
     if (game.players.human.gameOver === false) {
         if (game.gameBoard[id].marker === " ") {
             game.gameBoard[id].marker = game.players.human.symbol;
+            let spotSelected = game.gameBoard[id].name;
             game.players.human.moved = true;
-            addText(`${game.players.human.name} selects ${id}`);
+            addText(`${game.players.human.name} selects ${spotSelected}`);
             updateDOM(game);
             checkIfWon(game);
             playRound(game);
@@ -247,7 +257,7 @@ function game (userName) {
     game.players = players;
     let first = whosFirst(game);
     createGameDOM(game, first);
-    playRound(game, first);
+    playRound(game);
     }
 
 function playRound(game) {
@@ -264,7 +274,6 @@ function playRound(game) {
         playRound(game);
     } else if (computer.goesFirst == true && computer.moved == false) {
         computerMove(game);
-        playRound(game);
     } else if (computer.goesFirst == true && computer.moved == true && human.moved == false) {
         addText('Make your move');
         return;
@@ -273,16 +282,39 @@ function playRound(game) {
         game.players.computer.moved = false;
         playRound(game);
     }
-    
-
+    return;
 }
 
 function createGameDOM(game, first) {
+    //The header above the game board
     const appContainer = document.createElement('div');
     appContainer.setAttribute('id', 'appContainer');
     document.body.appendChild(appContainer);
     const introHeader = document.createElement("div");
     introHeader.setAttribute("id", 'headerDiv')
+    //Human dashboard
+    const humanDiv = document.createElement('div');
+    humanDiv.setAttribute('id', 'humanDiv');
+    const humanName = document.createElement('p');
+    humanName.setAttribute('id', 'humanName');
+    const humanSymbol = document.createElement('p');
+    humanSymbol.setAttribute('id', 'humanSymbol');
+    humanName.innerText = game.players.human.name;
+    humanDiv.appendChild(humanName);
+    humanSymbol.innerText = "Symbol: " + game.players.human.symbol;
+    humanDiv.appendChild(humanSymbol);
+    introHeader.appendChild(humanDiv);
+    const computerDiv = document.createElement('div');
+    computerDiv.setAttribute('id', 'computerDiv');
+    const computerName = document.createElement('p');
+    computerName.setAttribute('id', 'computerName');
+    const computerSymbol = document.createElement('p')
+    computerSymbol.setAttribute('id', 'computerSymbol');
+    computerName.innerText = game.players.computer.name;
+    computerSymbol.innerText = "Symbol: " + game.players.computer.symbol;
+    computerDiv.appendChild(computerName);
+    computerDiv.appendChild(computerSymbol);
+    introHeader.appendChild(computerDiv);
     appContainer.appendChild(introHeader);
     const introHeading = document.createElement('h1');
     introHeading.innerHTML = "Tic-Tac-Toe!";
@@ -291,6 +323,7 @@ function createGameDOM(game, first) {
     const container = document.createElement('div');
     container.setAttribute("id", 'container');
     appContainer.appendChild(container);
+
     createBoxes('topLeft', game);
     createBoxes('topMiddle', game);
     createBoxes('topRight', game);
@@ -374,8 +407,9 @@ function endGame(gameBoard) {
     replayBtn.setAttribute("id", "replayBtn");
     replayBtn.innerText = "Play Again";
     replayBtn.addEventListener("click", () => {
+        let userName = gameBoard.players.human.name;
         clearDom();
-        game();
+        game(userName);
     })
     document.getElementById('appContainer').appendChild(replayBtn);
 }
